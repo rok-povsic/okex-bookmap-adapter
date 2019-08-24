@@ -1,2 +1,4 @@
 /okex.log
 /target/
+/.gradle/
+/build/

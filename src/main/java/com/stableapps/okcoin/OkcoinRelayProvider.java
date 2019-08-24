@@ -32,7 +32,7 @@ public class OkcoinRelayProvider extends RelayProvider {
             Log.info("OkexRealtimeProvider " + provider.hashCode());
         } else {
             adminListeners.forEach(l -> l.onLoginFailed(LoginFailedReason.UNKNOWN,
-                    "The provider works only in demo mode now.\nPlease tick the demo checkbox in and leave the login/password fields blank."));
+                    "The provider currently works only in demo mode.\nPlease tick the demo checkbox in and leave the login/password fields blank."));
             return;
         }
         ListenableHelper.addListeners(provider, this);
