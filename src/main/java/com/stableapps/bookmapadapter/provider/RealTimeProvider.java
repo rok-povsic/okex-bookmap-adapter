@@ -194,19 +194,7 @@ public class RealTimeProvider extends ExternalLiveBaseProvider {
 		// Use default Bookmap price formatting logic for simplicity.
 		// Values returned by this method will be used on price axis and in few
 		// other places.
-	    double pips;
-		synchronized (aliasInstruments) {
-			pips = aliasInstruments.get(alias).pips;
-		}
-		
-		if(Double.isNaN(tempPips) || tempPips != pips) {
-		    tempPips = pips;
-		    Log.info("\ttempPips is " + tempPips + "\tprice " + price);
-		}
-		if (tempPricesCount++ <= 5) {
-		    Log.info(formatPriceDefault(pips, price));
-		}
-		
+	    double pips = pipsSizeMultipliers.get(alias).getLeft();
         return formatPriceDefault(pips, price);
 	}
 
