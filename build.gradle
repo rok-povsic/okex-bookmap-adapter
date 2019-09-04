@@ -19,9 +19,6 @@ repositories {
     }
 }
 
-//apply plugin: 'java'
-//apply plugin: 'eclipse'
-
 eclipse {
     classpath {
        downloadSources=true
@@ -29,24 +26,13 @@ eclipse {
 }
 
 dependencies {
-    //compile 'com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.2.1'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.2.1'
     implementation group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: '2.2.1'
-
-    
     implementation group: 'org.glassfish.tyrus', name: 'tyrus-client', version: '1.15'
-//    implementation group: 'com.bookmap.api', name: 'api-core', version: '7.0.0.79'
-
 //this one is temp until api core lib is available with the Layer1ApiPublicInterface 
     compileOnly fileTree(dir: 'lib', include: '*.jar')
     
  //   compile group: 'com.bookmap.api', name 'api-core', version '7.0.0.79'
-//<modelVersion>4.0.0</modelVersion>
-//<groupId>com.bookmap.api</groupId>
-//<artifactId>api-core</artifactId>
-//<version>7.0.0.79</version>
-    
-    //compile 'org.glassfish.tyrus:tyrus-client:1.15'
     implementation 'org.glassfish.tyrus:tyrus-container-grizzly-client:1.15'
     implementation 'javax.ws.rs:javax.ws.rs-api:2.1.1'
     implementation 'org.java-websocket:Java-WebSocket:1.3.9'
@@ -55,13 +41,9 @@ dependencies {
     implementation 'org.glassfish.jersey.inject:jersey-hk2:2.28'
     implementation 'commons-codec:commons-codec:1.12'
     compileOnly 'com.google.code.gson:gson:2.4'
-    //compile 'com.bookmap:bm-l1api:7.0'
-    //compile 'com.bookmap.api.api-core:7.0.0.79'
     implementation 'org.apache.commons:commons-compress:1.16'
-
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
-    //compileOnly 'org.projectlombok:lombok:1.18.4'
 }
 
 group = 'com.stableapps'
@@ -71,48 +53,10 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-//jar {
-//    archiveName 'com-bookmap-api-addons-raw.jar'
-//    
-//    manifest { 
-//        attributes 'Main-Class': 'mainClassName'
-//    }  
-//    
-//    from {
-//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-//    }
-//
-//}
-
-
-task fatJar (type: Jar){
-    baseName = 'com-bookmap-api-addons-raw.jar'
-    
-//    manifest { 
-//        attributes 'Main-Class': 'mainClassName'
-//    }  
-    
-    from {
-        configurations.runtimeClasspath.collect { 
-            exclude '/**/DEPENDENCIES.txt'
-            exclude '/**/LICENSE*'
-            exclude '/**/NOTICE*'
-            exclude '/**/INDEX*'
-            
-            it.isDirectory() ? it : zipTree(it)
-
-            }
-    }
-    with jar
-}
 
 task okex (type: Jar){
     baseName = okexName
     version = okexVersion
-    
-//    manifest { 
-//        attributes 'Main-Class': 'mainClassName'
-//    }  
     
     from {
         configurations.runtimeClasspath.collect { 
@@ -132,11 +76,7 @@ task okex (type: Jar){
 task okcoin (type: Jar){
     baseName = okcoinName
     version = okcoinVersion
-    
-//    manifest { 
-//        attributes 'Main-Class': 'mainClassName'
-//    }  
-    
+
     from {
         configurations.runtimeClasspath.collect { 
             exclude '/**/DEPENDENCIES.txt'
@@ -146,7 +86,6 @@ task okcoin (type: Jar){
             exclude '/com/stableapps/okex/**'
             
             it.isDirectory() ? it : zipTree(it)
-
             }
     }
     with jar
