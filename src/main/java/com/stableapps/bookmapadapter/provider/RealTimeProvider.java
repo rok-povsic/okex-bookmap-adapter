@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stableapps.bookmapadapter.client.AbstractClient;
 import com.stableapps.bookmapadapter.client.Connector;
@@ -148,7 +149,7 @@ public class RealTimeProvider extends ExternalLiveBaseProvider {
         aliasInstruments = new HashMap<>();
         singleThreadExecutor = Executors.newSingleThreadExecutor();
         singleThreadScheduledExecutor = Executors.newSingleThreadScheduledExecutor();
-        objectMapper = new ObjectMapper();
+        objectMapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         this.exchange = exchange;
         this.wsPortNumber = wsPortNumber;
         this.wsLink = wsLink;
