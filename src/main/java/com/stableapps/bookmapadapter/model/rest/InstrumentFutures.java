@@ -11,7 +11,7 @@ public class InstrumentFutures extends InstrumentGeneric {
     @JsonProperty("underlying_index")
     String underlyingIndex;
     @JsonProperty("contract_val")
-    int contractVal;
+    double contractVal;
     String listing;
     String delivery;
     @JsonProperty("trade_increment")
