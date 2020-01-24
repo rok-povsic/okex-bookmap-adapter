@@ -14,9 +14,9 @@ import velox.api.layer1.data.UserPasswordDemoLoginData;
 
 @Layer0LiveModule(fullName = OkexConstants.ADAPTER_FULL_NAME, shortName = OkexConstants.ADAPTER_SHORT_NAME)
 @Layer1ApiVersion(Layer1ApiVersionValue.VERSION2)
-public class OkexRelayProvider extends RelayProvider {
+public class Okex2RelayProvider extends RelayProvider {
 
-    public OkexRelayProvider() {
+    public Okex2RelayProvider() {
         super(OkexConstants.EXCHANGE, OkexConstants.WS_PORT_NUMBER, OkexConstants.WS_LINK);
         Log.info("Relay " + this.hashCode());
     }

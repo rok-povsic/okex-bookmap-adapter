@@ -7,7 +7,7 @@ plugins {
     id 'eclipse'
 }
 
-def okexName = 'okex-adapter'
+def okexName = 'okex2-adapter'
 def okexVersion = 'alpha-0.1.4.13'
 def okcoinName = 'okcoin-adapter'
 def okcoinVersion = 'alpha-1.0.0.9'
