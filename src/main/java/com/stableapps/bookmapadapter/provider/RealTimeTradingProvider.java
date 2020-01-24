@@ -334,22 +334,12 @@ public class RealTimeTradingProvider extends RealTimeProvider {
                     || orderInfo.isBuy() && positionLong > positionShort;
         }
 
-        if (instrumentType.equals("futures") && orderInfo.getType() == OrderType.MKT && !isCodirectionalWithPosition) {
+        if (instrumentType.equals("futures") && !isCodirectionalWithPosition) {
 
-            if (size == Math.abs(positionLong - positionShort)) {
-
-                if (positionLong != 0) {
-                    closeFuturesPosition(workaroundRequest, workaroundId, orderInfo, "3", positionLong);
-                }
-                if (positionShort != 0) {
-                    closeFuturesPosition(workaroundRequest, workaroundId, orderInfo, "4", positionShort);
-                }
+            if (orderInfo.isBuy()) {
+                closeFuturesPosition(workaroundRequest, workaroundId, orderInfo, "4", size);
             } else {
-                if (orderInfo.isBuy()) {
-                    closeFuturesPosition(workaroundRequest, workaroundId, orderInfo, "4", size);
-                } else {
-                    closeFuturesPosition(workaroundRequest, workaroundId, orderInfo, "3", size);
-                }
+                closeFuturesPosition(workaroundRequest, workaroundId, orderInfo, "3", size);
             }
         } else {
 
