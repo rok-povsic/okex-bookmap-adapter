@@ -1003,6 +1003,8 @@ public class RealTimeTradingProvider extends RealTimeProvider {
     }
 
     public void onFuturesPosition(List<FuturesPosition> data) {
+	    if (data == null) return;
+
         for (FuturesPosition position : data) {
 
             int qty = (int) Math.round(-position.getShortAvailQty() + position.getLongAvailQty());
