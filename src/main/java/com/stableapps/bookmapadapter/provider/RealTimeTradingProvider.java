@@ -1084,7 +1084,6 @@ public class RealTimeTradingProvider extends RealTimeProvider {
             OrderInfoBuilder orderInfo, String type, int size) {
         workaroundRequest.setType(type);
         ((PlaceOrderRequestFuturesOrSwap) workaroundRequest).setSize(size);
-        ((PlaceOrderRequestFuturesOrSwap) workaroundRequest).setMatchPrice("1");
 
         singleThreadExecutor.submit(() -> {
             Log.debug("+++Enter synchronize");
