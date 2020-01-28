@@ -322,19 +322,17 @@ public class RealTimeTradingProvider extends RealTimeProvider {
         final String workaroundId = clientOid;
         PlaceOrderRequest workaroundRequest = orderRequest;
         
-        int positionLong = 0;
-        int positionShort = 0;
         boolean isCodirectionalWithPosition = true;
 
         if (instrumentType.equals("futures")) {
-            positionLong = positionsMap.get(alias).getRight();
-            positionShort = positionsMap.get(alias).getLeft();
-            isCodirectionalWithPosition = positionsMap.get(alias) == null || positionShort == positionLong
-                    || !orderInfo.isBuy() && positionShort > positionLong
-                    || orderInfo.isBuy() && positionLong > positionShort;
+            int positionLong = positionsMap.get(alias).getRight();
+            int positionShort = positionsMap.get(alias).getLeft();
+            isCodirectionalWithPosition =
+                    orderInfo.isBuy() && positionShort < size ||
+                    !orderInfo.isBuy() && positionLong < size;
         }
 
-        if (instrumentType.equals("futures") && !isCodirectionalWithPosition) {
+        if (!isCodirectionalWithPosition) {
 
             if (orderInfo.isBuy()) {
                 closeFuturesPosition(workaroundRequest, workaroundId, orderInfo, "4", size);
