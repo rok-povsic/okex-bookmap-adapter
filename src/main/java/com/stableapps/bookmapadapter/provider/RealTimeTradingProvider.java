@@ -15,12 +15,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.binary.Base32;
 import org.apache.commons.lang3.tuple.Pair;
 import org.java_websocket.util.Base64;
 
@@ -48,6 +47,7 @@ import com.stableapps.bookmapadapter.model.rest.PlaceOrderRequestFuturesOrSwap;
 import com.stableapps.bookmapadapter.model.rest.PlaceOrderRequestTokenOrMargin;
 import com.stableapps.bookmapadapter.model.rest.PlaceOrderResponse;
 import com.stableapps.bookmapadapter.rest.RestClient;
+import com.stableapps.bookmapadapter.util.Constants;
 import com.stableapps.bookmapadapter.util.Utils;
 
 import lombok.Data;
@@ -303,18 +303,23 @@ public class RealTimeTradingProvider extends RealTimeProvider {
         }
 
         String clientOid = orderInfo.getClientId();
-        byte[] bytes = clientOid.getBytes();
-        byte[] decBytes;
-        String convertedId = "";
+
         try {
-            decBytes = Base64.decode(bytes);
-            convertedId = Hex.encodeHexString(decBytes);
+            byte[] decoded = Base64.decode(clientOid);
+            Base32 base32 = new Base32();
+            StringBuilder sb = new StringBuilder();
+            sb.append(Constants.CLIENT_OID_PREFIX).append(base32.encodeAsString(decoded));
+
+            while (sb.charAt(sb.length() - 1) == '=') {
+                sb.deleteCharAt(sb.length() - 1);
+            }
+            clientOid = sb.toString();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        orderRequest.setClientOrderId(convertedId);
-        final String workaroundId = convertedId;
+        orderRequest.setClientOrderId(clientOid);
+        final String workaroundId = clientOid;
         PlaceOrderRequest workaroundRequest = orderRequest;
         
         int positionLong = 0;
@@ -445,13 +450,8 @@ public class RealTimeTradingProvider extends RealTimeProvider {
     protected void onOrder(OrderData order) {
 
         synchronized (bmIdWorkingOrders) {
-            Optional<String> bmId = Optional.ofNullable(okexBmIds.get(order.getOrderId()));
-            Log.info("Order Received: " + order.getOrderId());
-            Log.info("Order: " + order);
-            Log.info("BM ID isPresent: " + bmId.isPresent());
-            String alias = order.getInstrumentType() + "@" + order.getInstrumentId();
-
             boolean isBuy = false;
+
             if (order instanceof OrderDataSpot) {
                 isBuy = ((OrderDataSpot) order).getSide().equals("buy");
                 order.setInstrumentType("spot");
@@ -470,9 +470,9 @@ public class RealTimeTradingProvider extends RealTimeProvider {
                 throw new RuntimeException("unknown order type");
             }
 
-            if (order.getClientOid().equals("") || !bmIdSentOrders.containsKey(order.getClientOid())) {
-                
+            String alias = order.getInstrumentType() + "@" + order.getInstrumentId();
 
+            if (order.getClientOid().equals("") || !bmIdSentOrders.containsKey(order.getClientOid())) {
                 OrderInfoBuilder newBuilder = new OrderInfoBuilder(alias, order.getOrderId(), isBuy,
                         order.getType().equals("limit") ? OrderType.LMT : OrderType.MKT, "", false);
                 if (order instanceof OrderDataSpot && order.getType().equals("limit")
