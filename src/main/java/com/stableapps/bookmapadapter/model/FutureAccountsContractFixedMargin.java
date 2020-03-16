@@ -1,10 +1,12 @@
 package com.stableapps.bookmapadapter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class FutureAccountsContractFixedMargin {
 
     @JsonProperty("available_qty")
@@ -21,5 +23,4 @@ public class FutureAccountsContractFixedMargin {
     double realizedPnl;
     @JsonProperty("unrealized_pnl")
     double unrealizedPnl;
-        
 }
