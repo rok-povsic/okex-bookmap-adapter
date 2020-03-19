@@ -358,11 +358,11 @@ public class RealTimeTradingProvider extends RealTimeProvider {
                 synchronized (bmIdSentOrders) {
                     bmIdSentOrders.put(workaroundId, orderInfo);
 
-                    PlaceOrderResponse orderResponse = getConnector().placeOrder(workaroundRequest);
-                    
                     orderInfo.setStatus(OrderStatus.PENDING_SUBMIT);
                     tradingListeners.forEach(l -> l.onOrderUpdated(orderInfo.build()));
                     orderInfo.markAllUnchanged();
+
+                    PlaceOrderResponse orderResponse = getConnector().placeOrder(workaroundRequest);
 
                     if (!orderResponse.isResult()) {
                         Log.info("REST Order Rejected: " + orderResponse.getErrorCode() + " "
