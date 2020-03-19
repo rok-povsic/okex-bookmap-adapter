@@ -11,5 +11,5 @@ public class Constants {
     public String ADAPTER_SHORT_NAME;
     public String WS_PORT_NUMBER;
     public String WS_LINK;
-    public static final String CLIENT_OID_PREFIX = "BM0";
+    public static final String CLIENT_OID_PREFIX = "BOKMP";
 }
