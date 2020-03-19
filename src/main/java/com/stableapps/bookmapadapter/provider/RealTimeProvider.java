@@ -184,6 +184,8 @@ public class RealTimeProvider extends ExternalLiveBaseProvider {
 			getConnector().unsubscribeContractMarketDepthFull(symbol, type);
 			getConnector().unsubscribeTrade(symbol, type);
 
+			aliasedStatusInfos.remove(alias);
+
 			if (aliasInstruments.remove(alias) != null) {
 				instrumentListeners.forEach(l -> l.onInstrumentRemoved(alias));
 			}
