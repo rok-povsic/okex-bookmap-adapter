@@ -794,12 +794,12 @@ public class Connector extends Endpoint implements AutoCloseable {
 	}
 
 	private void invalidateSession() {
-		Log.info("\tConnector" + this.hashCode() +  ": invalidateSession() " + session.hashCode());
+		Log.info("Connector" + this.hashCode() +  ": invalidateSession() " + session.hashCode());
 	}
 
 	@Override
 	public void onOpen(Session session, EndpointConfig config) {
-		Log.info("\tConnector " + this.hashCode() +  ": onOpen() session " + session.hashCode() + " isReconnecting " + isReconnecting);
+		Log.info("Connector " + this.hashCode() +  ": onOpen() session " + session.hashCode() + " isReconnecting " + isReconnecting);
 		this.session = session;
 		session.addMessageHandler((MessageHandler.Whole<Message>) (Message t) -> handleMessage(t));
 
@@ -827,7 +827,7 @@ public class Connector extends Endpoint implements AutoCloseable {
             Log.info("Unable to ping the remote");
         }
         
-		Log.info("\tConnector " + this.hashCode() +  ": onClose() session " + session.hashCode() + " reason " + closeReason );
+		Log.info("Connector " + this.hashCode() +  ": onClose() session " + session.hashCode() + " reason " + closeReason );
 		invalidateSession();
 //		adminListeners.forEach(l -> l.onConnectionLost(DisconnectionReason.FATAL, "You have not been suscribed to any instrument for 30 seconds"));
 		try {
@@ -1276,7 +1276,7 @@ public class Connector extends Endpoint implements AutoCloseable {
 			client.onConnectionLost(ClosedConnectionType.Disconnect, closeReason.getReasonPhrase());
 			
             if (closeReason.getCloseCode() == CloseReason.CloseCodes.NORMAL_CLOSURE) {
-                Log.info("\tOkexConnector.ReconnectHandlerImpl " + this.hashCode() + ": onDisconnect() Disconnect due to normal closure. No need to reconnect.");
+                Log.info("OkexConnector.ReconnectHandlerImpl " + this.hashCode() + ": onDisconnect() Disconnect due to normal closure. No need to reconnect.");
                 return false;
             } else if (closeReason.getCloseCode().getCode() == 4001) {
                 if (closeReason.getReasonPhrase().equals("no data received in 30s")) {
@@ -1284,7 +1284,7 @@ public class Connector extends Endpoint implements AutoCloseable {
                 }
                 return false;
 			}
-			Log.info("\tConnector: onDisconnect() ### Got Disconnected.  Reconnecting...");
+			Log.info("Connector: onDisconnect() Got Disconnected.  Reconnecting...");
 		     adminListeners.forEach(l -> l.onConnectionLost(DisconnectionReason.NO_INTERNET, "(onDisconnect)"));
 			return true;
 		    
@@ -1293,7 +1293,7 @@ public class Connector extends Endpoint implements AutoCloseable {
 		@Override
 		public boolean onConnectFailure(Exception exception) {
 			client.onConnectionLost(ClosedConnectionType.ConnectionFailure, "Network Connection Problem");
-			Log.info("\tConnector.ReconnectHandlerImpl " + this.hashCode() +  ": onDisconnect (### Reconnecting caused by:  " + exception.getMessage());
+			Log.info("Connector.ReconnectHandlerImpl " + this.hashCode() +  ": onDisconnect (### Reconnecting caused by:  " + exception.getMessage());
 			if (!isReconnecting) {
 		          adminListeners.forEach(l -> l.onConnectionLost(DisconnectionReason.NO_INTERNET, "(onConnectFailure)"));
 			}

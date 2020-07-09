@@ -444,12 +444,12 @@ public class RealTimeProvider extends ExternalLiveBaseProvider {
 
 		@Override
 		public void onConnectionLost(Connector.ClosedConnectionType closedConnectionType, String message) {
-			Log.info("\t\tOkexClient " + this.hashCode() +  ": onConnectionLost() " + closedConnectionType + ", " + message);
+			Log.info("OkexClient " + this.hashCode() +  ": onConnectionLost() " + closedConnectionType + ", " + message);
         }
 
         @Override
         public void onConnectionRestored() {
-            Log.info("\t\tOkexClient " + this.hashCode() +  ": onConnectionRestored()");
+            Log.info("OkexClient " + this.hashCode() +  ": onConnectionRestored()");
             
             if ( RealTimeProvider.this instanceof RealTimeTradingProvider) {
                 @SuppressWarnings("resource")
@@ -620,7 +620,7 @@ public class RealTimeProvider extends ExternalLiveBaseProvider {
                 final Instrument instrument = new Instrument(alias, pips);
                 aliasInstruments.put(alias, instrument);
 
-                Log.info("\tinstrumentInfo to BM alias " + alias + " tickSize " + tickSize);
+                Log.info("instrumentInfo to BM alias " + alias + " tickSize " + tickSize);
                 tempLinesCount = 0;
                 tempPricesCount = 0;
                 tempPips = Double.NaN;
