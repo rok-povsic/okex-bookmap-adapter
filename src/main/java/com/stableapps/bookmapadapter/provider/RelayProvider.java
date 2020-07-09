@@ -35,10 +35,9 @@ public class RelayProvider extends Layer1ApiRelay {
     
     @Override
     public void close() {
-        super.close();
-        ListenableHelper.removeListeners(provider, this);
-        provider.close();
         providerThread.interrupt();
+        ListenableHelper.removeListeners(provider, this);
+        super.close();
     }
     
     @Override
