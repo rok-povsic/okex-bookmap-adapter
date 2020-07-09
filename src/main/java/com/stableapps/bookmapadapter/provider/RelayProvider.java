@@ -13,7 +13,7 @@ import velox.api.layer1.layers.Layer1ApiRelay;
 @Layer1ApiVersion(Layer1ApiVersionValue.VERSION2)
 public class RelayProvider extends Layer1ApiRelay {
 
-    Thread providerThread;
+    private Thread providerThread;
 
     public RelayProvider(String exchange, String wsPortNumber, String wsLink) {
         super(new RealTimeProvider(exchange, wsPortNumber, wsLink), false);
