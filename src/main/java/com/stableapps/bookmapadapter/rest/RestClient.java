@@ -5,6 +5,7 @@
  */
 package com.stableapps.bookmapadapter.rest;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.time.Instant;
 import java.util.List;
@@ -133,6 +134,7 @@ public class RestClient extends AbstractRestClient {
 		}
 	}
 	
+    @SuppressWarnings("unchecked")
     public <R> R customCall(String path, String method, String json, Class<R> responseClass, String apiKey,
             String secretKey, String passPhraze, List<Map.Entry<String, String>> queryParams) {
         int retry = 0;
@@ -177,7 +179,12 @@ public class RestClient extends AbstractRestClient {
 	    Log.info( "Giving up calling REST: " +path);
 	    
 	    try {
-	        return responseClass.newInstance();
+            if (responseClass.isArray()) {
+                Class<?> componentType = responseClass.getComponentType();
+                return (R) Array.newInstance(componentType, 0);
+            } else {
+                return responseClass.newInstance();
+            }
 	    } catch (InstantiationException | IllegalAccessException ex) {
 	        throw new RuntimeException("Can't instantiate a blank response class" + responseClass.getCanonicalName());
 	    }
