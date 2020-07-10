@@ -14,6 +14,7 @@ import velox.api.layer1.layers.Layer1ApiRelay;
 public class RelayProvider extends Layer1ApiRelay {
 
     private Thread providerThread;
+    private Object lock = new Object();
 
     public RelayProvider(String exchange, String wsPortNumber, String wsLink) {
         super(new RealTimeProvider(exchange, wsPortNumber, wsLink), false);
@@ -27,15 +28,21 @@ public class RelayProvider extends Layer1ApiRelay {
     
     @Override
     public void login(LoginData loginData) {
-        providerThread = new Thread(() -> provider.login(loginData));
-        providerThread.setName("-> " + provider.getClass().getSimpleName());
-        providerThread.start();
+        synchronized (lock) {
+            providerThread = new Thread(() -> provider.login(loginData));
+            providerThread.setName("-> " + provider.getClass().getSimpleName());
+            providerThread.start();    
+        }
     }
     
     
     @Override
     public void close() {
-        providerThread.interrupt();
+        synchronized (lock) {
+            if (providerThread != null) {
+                providerThread.interrupt();
+            }
+        }
         ListenableHelper.removeListeners(provider, this);
         super.close();
     }
