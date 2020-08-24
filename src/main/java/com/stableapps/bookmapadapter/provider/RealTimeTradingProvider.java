@@ -412,10 +412,8 @@ public class RealTimeTradingProvider extends RealTimeProvider {
 				OrderCancelParameters orderCancelParameters = (OrderCancelParameters) orderUpdateParameters;
 				
 				String id = orderIdToClientOid.get(orderCancelParameters.orderId);
-
-                OrderInfoBuilder builder = bmIdWorkingOrders.get(id);
-
-                String alias = builder.getInstrumentAlias();
+				
+				String alias = bmIdWorkingOrders.get(id).getInstrumentAlias();
 	            int at = alias.indexOf('@');
 	            String symbol = alias.substring(at + 1);
 	            String type = alias.substring(0, at);
@@ -427,11 +425,6 @@ public class RealTimeTradingProvider extends RealTimeProvider {
 				} else if (type.equals("futures")) {
                     path = "/api/futures/v3/cancel_order/" + symbol + "/";
                 }
-
-                builder.setStatus(OrderStatus.PENDING_CANCEL);
-                tradingListeners.forEach(l -> l.onOrderUpdated(builder.build()));
-                builder.markAllUnchanged();
-
 				connector.restClient.call(path + id, body, String.class, apiKey, secretKey, connector.passPhraze);
 			}
 		} else {
